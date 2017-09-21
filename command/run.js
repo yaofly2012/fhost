@@ -22,8 +22,16 @@ exports.run = function(option) {
 			}
 		})
 	}).listen(option.port, function () {
-	  console.log(`App listening on port ${option.port}!`)
-	})
+	  	console.log(`App is listening on port ${option.port}!`)
+	}).on('error', function(e) {
+		switch(e.code) {
+			case 'EADDRINUSE':
+				console.log(`Error: port ${option.port} used!`);
+				break;
+			default:
+				console.log(`Unknow Error ${e.code} Occured!`);
+		}
+	});
 }
 
 

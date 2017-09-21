@@ -19,6 +19,6 @@ program
 
 program.parse(process.argv);
 
-process.on('error', function(error){
-	console.log(error);
+process.on('uncaughtException', function(e){
+	console.log(e);
 });
