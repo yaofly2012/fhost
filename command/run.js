@@ -82,7 +82,7 @@ var handleFile = (function() {
 
 // 处理目录请求
 var handleDirectory = (function() {
-	var whiteExt = ['*'], // 哪些后缀的文件可用展示
+	var whiteExt = '*', // 哪些后缀的文件可用展示
 		blackDirectory = ['node_modules', '.git']; // 不可展示的目录名称
 
 	function genLi(href, text) {
