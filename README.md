@@ -6,13 +6,13 @@ static file web host
 npm install -g fhost
 ```
 ## Start Web Host ##
-cd the folder that you want to access, then execute:
+cd the folder that you want to view, then execute:
 ```
 fhost run 
 ```
 That will launch the web host, and the default port is 8080. You can change port by command:
 ```
-fhost run -p [port you want]
+fhost run -p [port whatever you want]
 ```
 ## Access ##
-Enter address 'http://localhost:8080/' in your broswer, you will see the file/folder list of the folder in whitch you execute fhost command.
+Enter address 'http://localhost:8080/' in your browser, you will see the file/folder list of the folder in which you execute fhost command.
