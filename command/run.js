@@ -3,6 +3,7 @@ var fs = require('fs')
 var parseUrl = require('parseurl')
 var path = require('path')
 var url = require('url')
+var util = require('../util/util')
 
 exports.run = function(option) {
 	// Launch server
@@ -10,13 +11,13 @@ exports.run = function(option) {
 		var pathname = path.join(process.cwd(), decodeURI(parseUrl(req).pathname));
 		fs.lstat(pathname, function(error, stats) {
 			if(error) {
-				res.end('Read file error: ' + error.code + ' ..\n');
+				handle404(res);
 				return;
 			}
 			if(stats.isFile()) {
 				handleFile(res, pathname);
 			} else if(stats.isDirectory()) {
-				handleDirectory(res, pathname, req.url);
+				handleDirectory(res, pathname, req.url, req);
 			} else {
 	            res.end();
 			}
@@ -34,6 +35,10 @@ exports.run = function(option) {
 	});
 }
 
+var handle404 = function(response) {
+	response.writeHead(404, { 'Content-Type': 'text/plain' });
+	response.end('Not Found', 'utf-8');
+}
 
 // 处理静态文件请求
 var handleFile = (function() {
@@ -63,8 +68,7 @@ var handleFile = (function() {
 		fs.readFile(path, function(error, content) {
 	        if (error) {
 	            if(error.code == 'ENOENT'){
-	                response.writeHead(404, { 'Content-Type': 'text/plain' });
-	                response.end('Not Found', 'utf-8');
+	                handle404(response);
 	            }
 	            else {
 	                response.writeHead(500);
@@ -88,7 +92,7 @@ var handleDirectory = (function() {
 	function genLi(href, text) {
 		return ['<li><a href="', href, '">', text, '</a></li>'].join('');
 	}
-	function createDirectoryHtml(parentPath, list, parentUrl) {
+	function createDirectoryHtml(parentPath, list, parentUrl, isMobile) {
 		var liStr = [];
 		if(parentUrl.substr(-1) !== '/') {
 			parentUrl += '/';
@@ -112,6 +116,7 @@ var handleDirectory = (function() {
 				'<html lang="en">',
 					'<head>',
 						'<meta charset="utf-8">',
+						isMobile ? '<meta name="viewport" content="width=device-width,initial-scale=1">': '',
 						'<title>', pre, '</title>',
 						'<style>',
 							'body{color: #333; font-size: 14px; margin: 20px 10px;} ',
@@ -126,14 +131,14 @@ var handleDirectory = (function() {
 				'</html>'].join('');
 	}
 
-	return function (response, path, url) {		
+	return function (response, path, url, req) {		
 		fs.readdir(path, function onReaddir (err, list) {
 			if (err) {
 				response.end('Read Directory error');
 				return;
 			}
 		    response.setHeader('Content-Type', 'text/html; charset=UTF-8');
-		    response.end(createDirectoryHtml(path, list, url));
+		    response.end(createDirectoryHtml(path, list, url, util.isMobile(req.headers['user-agent'])));
 		})
 	}
 })();
