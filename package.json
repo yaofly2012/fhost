@@ -1,6 +1,6 @@
 {
   "name": "fhost",
-  "version": "1.1.2",
+  "version": "1.1.5",
   "description": "Static File Web Host",
   "main": "index.js",
   "scripts": {
@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "commander": "^2.11.0",
+    "openurl": "^1.1.1",
     "parseurl": "^1.3.2"
   }
 }

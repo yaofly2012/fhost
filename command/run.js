@@ -3,7 +3,7 @@ var fs = require('fs')
 var parseUrl = require('parseurl')
 var path = require('path')
 var url = require('url')
-var childProcess = require('child_process')
+var openUrl = require('openurl')
 var util = require('../util/util')
 
 exports.run = function(option) {
@@ -25,7 +25,7 @@ exports.run = function(option) {
 		})
 	}).listen(option.port, function () {
 	  	console.log(`App is listening on port ${option.port}!`);
-	  	childProcess.exec(`start http://localhost:${option.port}`);
+	  	openUrl.open(`http://localhost:${option.port}`);
 	}).on('error', function(e) {
 		switch(e.code) {
 			case 'EADDRINUSE':
