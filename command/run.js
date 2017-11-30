@@ -3,6 +3,7 @@ var fs = require('fs')
 var parseUrl = require('parseurl')
 var path = require('path')
 var url = require('url')
+var childProcess = require('child_process')
 var util = require('../util/util')
 
 exports.run = function(option) {
@@ -23,7 +24,8 @@ exports.run = function(option) {
 			}
 		})
 	}).listen(option.port, function () {
-	  	console.log(`App is listening on port ${option.port}!`)
+	  	console.log(`App is listening on port ${option.port}!`);
+	  	childProcess.exec(`start http://localhost:${option.port}`);
 	}).on('error', function(e) {
 		switch(e.code) {
 			case 'EADDRINUSE':
@@ -131,7 +133,7 @@ var handleDirectory = (function() {
 				'</html>'].join('');
 	}
 
-	return function (response, path, url, req) {		
+	return function (response, path, url, req) {	
 		fs.readdir(path, function onReaddir (err, list) {
 			if (err) {
 				response.end('Read Directory error');
