@@ -1,5 +1,5 @@
 # fhost #
-static file web host
+The viewer of static file on line
 # Quick Guide #
 ## Install ##
 ```
