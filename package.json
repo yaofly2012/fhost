@@ -1,6 +1,6 @@
 {
   "name": "fhost",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Static File Web Host",
   "main": "index.js",
   "scripts": {
