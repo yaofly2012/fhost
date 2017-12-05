@@ -44,26 +44,51 @@ var handle404 = function(response) {
 
 // 处理静态文件请求
 var handleFile = (function() {
-	function getContype(filePath) {
-		var extname = path.extname(filePath);
-	    var contentType = 'text/plain';
-	    switch (extname) { 
-	    	case '.html':
-	        	contentType = 'text/html';
+	function ext2mimeType(extName) {
+		var type = 'text';
+		switch (extName) { 
+	    	case 'html':
+	        case 'css':
+	            type = 'text';
 	            break;
-	        case '.js':
-	            contentType = 'text/javascript';
+	        case 'png':    
+	        case 'jpg':
+	        case 'jpeg':
+	        case 'gif':
+	         	type = 'image';
 	            break;
-	        case '.css':
-	            contentType = 'text/css';
+	        case 'json':
+	        case 'js':
+	        	type = 'application';
 	            break;
-	        case '.png':
-	            contentType = 'image/png';
-	            break;      
-	        case '.jpg':
-	            contentType = 'image/jpg';
+            case 'mp3':
+            	type = 'audio';
 	            break;
 	    }
+	    return type;
+	}
+
+	function ext2mimeSubType(extName) {
+		var subType = extName;
+		switch(extName) {
+			case 'js':
+				subType =  'javascript'; // TODO x-javascript ?
+				break;
+			case 'mp3':
+				subType = 'mpeg';
+			case 'jpg':
+				subType = 'jpeg';
+				break;
+
+		}
+		return subType;
+	}
+
+	function getContype(filePath) {
+		var extname = path.extname(filePath).toLowerCase().substr(1),
+			type = ext2mimeType(extname),
+			subType = ext2mimeSubType(extname),
+			contentType = [type, subType].join('/');
 	    return contentType;
 	}
 	return function (response, path) {
